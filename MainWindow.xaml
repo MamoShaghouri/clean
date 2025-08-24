@@ -1,0 +1,53 @@
+﻿<Window x:Class="Shaghouri.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Shaghouri"
+        mc:Ignorable="d"
+        Title="MainWindow" WindowState="Maximized">
+    <Window.Resources>
+        <Style x:Key="ModernButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF41D8CE"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="36"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Margin" Value="0,0,0,32"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="18">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF3C736F"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid>
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#FFEDF6F9" Offset="0"/>
+                    <GradientStop Color="#FFBEE6E6" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="116,90,0,0" VerticalAlignment="Top">
+                <Button Content="Create" Width="345" Height="90" Style="{StaticResource ModernButtonStyle}" AutomationProperties.Name="btnCreate" Click="BtnCreate_Click"/>
+                <Button x:Name="btnSettings" Content="Settings" Width="345" Height="90" Style="{StaticResource ModernButtonStyle}" Click="BtnSettings_Click" AutomationProperties.Name="btnSettings"/>
+                <Button x:Name="btnLibraries" Content="Libraries" Width="345" Height="90" Style="{StaticResource ModernButtonStyle}" Click="BtnLibraries_Click"/>
+                <Button Content="Button" Width="345" Height="90" Style="{StaticResource ModernButtonStyle}"/>
+                <Button Content="Button" Width="345" Height="90" Style="{StaticResource ModernButtonStyle}"/>
+                <Button Content="Button" Width="345" Height="90" Style="{StaticResource ModernButtonStyle}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

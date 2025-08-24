@@ -1,0 +1,82 @@
+﻿<Window x:Class="Shaghouri.Save_Pattern"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Shaghouri"
+        mc:Ignorable="d"
+        Title="Save Pattern" Height="800" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#F8F9FA"/>
+                <GradientStop Color="#E3F2FD" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <!-- تعريف الأعمدة والصفوف -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!-- العنوان الرئيسي -->
+        <TextBlock Text="Save Pattern" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" 
+                   FontSize="28" FontWeight="Bold" Foreground="#1976D2" Margin="0,30,0,40"/>
+        <!-- القسم الأيسر - حقول الإدخال -->
+        <StackPanel Grid.Column="0" Grid.Row="1" Margin="40,0,20,0" VerticalAlignment="Top">
+            <TextBlock Text="Piece Name" FontSize="16" FontWeight="SemiBold" Foreground="#424242" Margin="0,0,0,8"/>
+            <Border CornerRadius="8" BorderBrush="#E0E0E0" BorderThickness="1" Background="White" Margin="0,0,0,20" Height="40">
+                <TextBox x:Name="Text_Piece_Name" FontSize="14" BorderThickness="0" Background="Transparent" 
+                         VerticalContentAlignment="Center" Margin="12,0"/>
+            </Border>
+            <TextBlock Text="Fabric Type" FontSize="16" FontWeight="SemiBold" Foreground="#424242" Margin="0,0,0,8"/>
+            <Border CornerRadius="8" BorderBrush="#E0E0E0" BorderThickness="1" Background="White" Margin="0,0,0,20" Height="40">
+                <ComboBox x:Name="Combo_Fabric_Type" FontSize="14" BorderThickness="0" Background="White" 
+                          VerticalContentAlignment="Center" Margin="12,0" BorderBrush="White"/>
+            </Border>
+            <TextBlock Text="Description" FontSize="16" FontWeight="SemiBold" Foreground="#424242" Margin="0,0,0,8"/>
+            <Border CornerRadius="8" BorderBrush="#E0E0E0" BorderThickness="1" Background="White" Margin="0,0,0,20" Height="40">
+                <TextBox FontSize="14" BorderThickness="0" Background="Transparent" 
+                         VerticalContentAlignment="Center" Text="WWW.HATCAD.COM" Margin="12,0"/>
+            </Border>
+            <TextBlock Text="Quantity" FontSize="16" FontWeight="SemiBold" Foreground="#424242" Margin="0,0,0,8"/>
+            <Border CornerRadius="8" BorderBrush="#E0E0E0" BorderThickness="1" Background="White" Margin="0,0,0,20" Height="40">
+                <TextBox FontSize="14" BorderThickness="0" Background="Transparent" 
+                         VerticalContentAlignment="Center" Text="1" HorizontalContentAlignment="Center" Margin="12,0"/>
+            </Border>
+            <Border CornerRadius="8" BorderBrush="#E0E0E0" BorderThickness="1" Margin="0,0,0,20" Height="50">
+                <Border.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFFFB7B7"/>
+                        <GradientStop Color="#FFF52525" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <CheckBox x:Name="Double_X" Content="Double X" FontSize="16" FontWeight="SemiBold" 
+                          VerticalContentAlignment="Center" BorderThickness="0" Background="Transparent" 
+                          HorizontalAlignment="Center" Foreground="#424242"/>
+            </Border>
+        </StackPanel>
+        <!-- القسم الأيمن - منطقة العرض -->
+        <Border Grid.Column="2" Grid.Row="1" CornerRadius="12" BorderBrush="#E0E0E0" BorderThickness="2" 
+                Background="White" Margin="20,0,40,0" VerticalAlignment="Top">
+            <Canvas x:Name="Show" Background="White" Margin="0" Height="400" Width="300"/>
+        </Border>
+        <!-- الأزرار في الأسفل -->
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Orientation="Horizontal" 
+                    HorizontalAlignment="Center" Margin="0,30,0,30">
+            <Border CornerRadius="10" Background="#1976D2" Margin="10,0" Height="45" Width="120">
+                <Button x:Name="btnSave" Content="Save" FontSize="16" FontWeight="Bold" Foreground="White" 
+                        Background="Transparent" BorderThickness="0" Height="45" Width="120" Cursor="Hand"/>
+            </Border>
+            <Border CornerRadius="10" Background="#F44336" Margin="10,0" Height="45" Width="120">
+                <Button x:Name="btnCancel" Content="Cancel" FontSize="16" FontWeight="Bold" Foreground="White" 
+                        Background="Transparent" BorderThickness="0" Height="45" Width="120" Cursor="Hand"/>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -7,7 +7,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MouseButtonState = System.Windows.Input.MouseButtonState;
-using System.Windows.Forms; // لاستخدام ColorDialog
+
 using Shaghouri;
 using Microsoft.Win32;
 using System.IO;
@@ -83,12 +83,16 @@ namespace Shaghouri
         {
             this.DataContext = this;
             cm.IsChecked = true;
-            SelectedUnit = UnitType.CM;
+            SelectedUnit = UnitService.UnitType.CM;
             
             // الوضع الافتراضي: عرض اللوحتين معًا وبنفس العرض
             _canvasService.InitializeDefaultCanvasLayout(canvasGrid, LeftCanvas, RightCanvas);
             
             ApplySettingsToUI();
+            
+            // تهيئة DPI للوحدات
+            UnitService.UpdateDpiScaleFromWindow(this);
+            
             this.Closing += (s, e) => SaveSettingsFromUI();
         }
         
@@ -150,8 +154,12 @@ namespace Shaghouri
         
         #region Unit Management
 
-        public enum UnitType { MM, CM, INCH }
-        public UnitType SelectedUnit = UnitType.CM;
+        // استخدام الخدمة المركزية للوحدات
+        public UnitService.UnitType SelectedUnit 
+        { 
+            get => UnitService.CurrentUnit;
+            set => UnitService.CurrentUnit = value;
+        }
         
         #endregion
         

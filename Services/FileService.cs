@@ -120,11 +120,11 @@ namespace Shaghouri.Services
 
                 foreach (var rect in rectangles)
                 {
-                    // تحويل البكسل إلى سم (10 بكسل = 1 سم)
-                    double x = rect.Rect.Left / 10.0;
-                    double y = rect.Rect.Top / 10.0;
-                    double w = rect.Rect.Width / 10.0;
-                    double h = rect.Rect.Height / 10.0;
+                    // تحويل الأبعاد من البكسل إلى الوحدة المحددة
+                    double x = UnitService.ConvertFromPixels(rect.Rect.Left);
+                    double y = UnitService.ConvertFromPixels(rect.Rect.Top);
+                    double w = UnitService.ConvertFromPixels(rect.Rect.Width);
+                    double h = UnitService.ConvertFromPixels(rect.Rect.Height);
 
                     // HPGL: 1 سم = 400 وحدة
                     int x1 = (int)(x * 400);

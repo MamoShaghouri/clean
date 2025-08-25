@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -113,7 +114,7 @@ namespace Shaghouri
             double initialHeight = _drawingState.CurrentRectangleShape.Rect.Height == 0 ? 10 : _drawingState.CurrentRectangleShape.Rect.Height;
             
             // افتح نافذة Draw_Rectangle
-            string unitStr = SelectedUnit == UnitType.MM ? "mm" : SelectedUnit == UnitType.INCH ? "inch" : "cm";
+            string unitStr = UnitService.GetUnitSymbol(UnitService.CurrentUnit);
             double widthForDialog = ConvertToDialogUnits(initialWidth);
             double heightForDialog = ConvertToDialogUnits(initialHeight);
             
@@ -222,28 +223,12 @@ namespace Shaghouri
         
         private double ConvertToDialogUnits(double pixels)
         {
-            switch (SelectedUnit)
-            {
-                case UnitType.CM:
-                    return pixels / 10.0;
-                case UnitType.INCH:
-                    return pixels / 25.4;
-                default: // MM
-                    return pixels;
-            }
+            return UnitService.ConvertFromPixels(pixels, UnitService.CurrentUnit);
         }
         
         private double ConvertFromDialogUnits(double dialogValue)
         {
-            switch (SelectedUnit)
-            {
-                case UnitType.CM:
-                    return dialogValue * 10.0;
-                case UnitType.INCH:
-                    return dialogValue * 25.4;
-                default: // MM
-                    return dialogValue;
-            }
+            return UnitService.ConvertToPixels(dialogValue, UnitService.CurrentUnit);
         }
         
         private Rect CalculateFinalRectangle(Point startPoint, Point endPoint, double width, double height)
@@ -302,26 +287,11 @@ namespace Shaghouri
             {
                 double width = rect.Rect.Width;
                 double height = rect.Rect.Height;
-                string unit = "";
                 
-                switch (SelectedUnit)
-                {
-                    case UnitType.MM:
-                        width = width * 1.0;
-                        height = height * 1.0;
-                        unit = "mm";
-                        break;
-                    case UnitType.CM:
-                        width = width / 10.0;
-                        height = height / 10.0;
-                        unit = "cm";
-                        break;
-                    case UnitType.INCH:
-                        width = width / 25.4;
-                        height = height / 25.4;
-                        unit = "inch";
-                        break;
-                }
+                // استخدام الخدمة المركزية للتحويل
+                width = UnitService.ConvertFromPixels(width);
+                height = UnitService.ConvertFromPixels(height);
+                string unit = UnitService.GetUnitSymbol(UnitService.CurrentUnit);
             }
             
             LeftCanvas.InvalidateVisual();

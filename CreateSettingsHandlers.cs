@@ -1,9 +1,12 @@
+using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Shaghouri.Models;
+using Shaghouri.Services;
 
 namespace Shaghouri
 {
@@ -19,8 +22,8 @@ namespace Shaghouri
             if (LeftCanvas != null && settings != null)
             {
                 // عرض القيمة للمستخدم مقسومة على 10
-                TextBoxLeftCanvasGridSpacingWidth.Text = (settings.GridRectWidth / 10.0).ToString();
-                TextBoxLeftCanvasGridSpacingHeight.Text = (settings.GridRectHeight / 10.0).ToString();
+                            TextBoxLeftCanvasGridSpacingWidth.Text = UnitService.ConvertGridSpacingFromPixels(settings.GridRectWidth).ToString();
+            TextBoxLeftCanvasGridSpacingHeight.Text = UnitService.ConvertGridSpacingFromPixels(settings.GridRectHeight).ToString();
                 LeftCanvas.GridRectWidth = settings.GridRectWidth;
                 LeftCanvas.GridRectHeight = settings.GridRectHeight;
                 LeftCanvas.GridLinesColor = AppSettings.ParseColor(settings.GridLinesColor);
@@ -88,11 +91,11 @@ namespace Shaghouri
         {
             if (LeftCanvas != null && settings != null)
             {
-                // احفظ القيمة المنطقية * 10
+                // احفظ القيمة المنطقية باستخدام خدمة الوحدات
                 if (double.TryParse(TextBoxLeftCanvasGridSpacingWidth.Text, out double widthValue))
-                    settings.GridRectWidth = widthValue * 10;
+                    settings.GridRectWidth = UnitService.ConvertGridSpacingToPixels(widthValue);
                 if (double.TryParse(TextBoxLeftCanvasGridSpacingHeight.Text, out double heightValue))
-                    settings.GridRectHeight = heightValue * 10;
+                    settings.GridRectHeight = UnitService.ConvertGridSpacingToPixels(heightValue);
                     
                 settings.GridLinesColor = AppSettings.ColorToHex(LeftCanvas.GridLinesColor);
                 settings.GridOpacity = SilderLeftCanvasGridOpacity.Value / 100.0;

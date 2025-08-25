@@ -1,9 +1,11 @@
+using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Collections.Generic; // Added for List
-using System; // Added for Math
+using System.Windows.Shapes;
+using Shaghouri.Services;
 using WpfPoint = System.Windows.Point;
 
 namespace Shaghouri
@@ -184,21 +186,8 @@ namespace Shaghouri
                             string unit = "";
                             if (parentCreateWindow != null)
                             {
-                                switch (parentCreateWindow.SelectedUnit)
-                                {
-                                    case Shaghouri.Create.UnitType.MM:
-                                        length = length * 1.0;
-                                        unit = "mm";
-                                        break;
-                                    case Shaghouri.Create.UnitType.CM:
-                                        length = length / 10.0;
-                                        unit = "cm";
-                                        break;
-                                    case Shaghouri.Create.UnitType.INCH:
-                                        length = length / 25.4;
-                                        unit = "inch";
-                                        break;
-                                }
+                                length = UnitService.ConvertFromPixels(length);
+                                unit = UnitService.GetUnitSymbol(UnitService.CurrentUnit);
                             }
                             double minDim = System.Math.Min((p1 - p2).Length, (pts[(i + 2) % 4].Position - pts[(i + 1) % 4].Position).Length);
                             double fontSize = 16 / ZoomLevel;
@@ -250,21 +239,8 @@ namespace Shaghouri
                         string unit = "";
                         if (parentCreateWindow != null)
                         {
-                            switch (parentCreateWindow.SelectedUnit)
-                            {
-                                case Shaghouri.Create.UnitType.MM:
-                                    length = length * 1.0;
-                                    unit = "mm";
-                                    break;
-                                case Shaghouri.Create.UnitType.CM:
-                                    length = length / 10.0;
-                                    unit = "cm";
-                                    break;
-                                case Shaghouri.Create.UnitType.INCH:
-                                    length = length / 25.4;
-                                    unit = "inch";
-                                    break;
-                            }
+                            length = UnitService.ConvertFromPixels(length);
+                            unit = UnitService.GetUnitSymbol(UnitService.CurrentUnit);
                         }
                         double minDim = System.Math.Min((p1 - p2).Length, (pts[(i + 2) % 4].Position - pts[(i + 1) % 4].Position).Length);
                         double fontSize = 16 / ZoomLevel;

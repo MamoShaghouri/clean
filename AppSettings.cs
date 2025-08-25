@@ -17,7 +17,7 @@ namespace Shaghouri
         public double LeftCanvasBackgroundOpacity { get; set; } = 1.0; // Default: fully opaque
         public bool LeftCanvasIsGradient { get; set; } = false;
         public string LeftCanvasGradientColor { get; set; } = "#FF41D8CE"; // Default gradient color
-        
+
         // Right Canvas Settings
         public string RightCanvasBackgroundColor { get; set; } = "#FFFFFFFF"; // Default: White
         public double RightCanvasBackgroundOpacity { get; set; } = 1.0; // Default: fully opaque

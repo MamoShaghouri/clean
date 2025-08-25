@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -6,6 +7,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Shaghouri.Services;
 using Shaghouri.Models;
+using Shaghouri;
 
 namespace Shaghouri
 {
@@ -14,6 +16,42 @@ namespace Shaghouri
     /// </summary>
     public partial class Create
     {
+        #region Custom Color Picker
+        
+        private void ShowCustomColorPicker(Color initialColor, Action<Color> onColorSelected)
+        {
+            var colorPicker = new CustomColorPicker();
+            colorPicker.SetInitialColor(initialColor);
+            
+            var window = new Window
+            {
+                Title = "اختيار اللون",
+                Content = colorPicker,
+                Width = 450,
+                Height = 500,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Owner = this, // اجعل المالك نافذة Create الحالية
+                ResizeMode = ResizeMode.NoResize,
+                ShowInTaskbar = false,
+                WindowStyle = WindowStyle.ToolWindow,
+                Topmost = true
+            };
+            
+            colorPicker.ColorSelected += (sender, color) =>
+            {
+                onColorSelected(color);
+                window.Close();
+            };
+            
+            colorPicker.Canceled += (sender, e) =>
+            {
+                window.Close();
+            };
+            
+            window.ShowDialog();
+        }
+        
+        #endregion
         #region Canvas Control Events
         
         private void btnLeftCanvasTop_Click(object sender, RoutedEventArgs e)
@@ -172,70 +210,49 @@ namespace Shaghouri
         
         private void btnLeftCanvasChangeGridColor_Click(object sender, RoutedEventArgs e)
         {
-            using (var colorDialog = new System.Windows.Forms.ColorDialog())
+            var currentColor = LeftCanvas != null ? LeftCanvas.GridLinesColor : Colors.LightGray;
+            ShowCustomColorPicker(currentColor, (selectedColor) =>
             {
-                var currentColor = LeftCanvas != null ? LeftCanvas.GridLinesColor : Colors.LightGray;
-                colorDialog.Color = System.Drawing.Color.FromArgb(currentColor.A, currentColor.R, currentColor.G, currentColor.B);
-
-                if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    var selected = colorDialog.Color;
-                    if (LeftCanvas != null)
-                        LeftCanvas.GridLinesColor = Color.FromArgb(selected.A, selected.R, selected.G, selected.B);
-                }
-            }
+                if (LeftCanvas != null)
+                    LeftCanvas.GridLinesColor = selectedColor;
+            });
         }
         
         private void btnLeftCanvasToggleBackground_Click(object sender, RoutedEventArgs e)
         {
-            using (var colorDialog = new System.Windows.Forms.ColorDialog())
+            var lastColor = AppSettings.ParseColor(settings.LeftCanvasGradientColor);
+            ShowCustomColorPicker(lastColor, (chosenColor) =>
             {
-                var lastColor = AppSettings.ParseColor(settings.LeftCanvasGradientColor);
-                colorDialog.Color = System.Drawing.Color.FromArgb(lastColor.A, lastColor.R, lastColor.G, lastColor.B);
+                // Create gradient brush from white to chosen color
+                var gradient = new LinearGradientBrush();
+                gradient.StartPoint = new Point(0, 0);
+                gradient.EndPoint = new Point(1, 1);
+                gradient.GradientStops.Add(new GradientStop(Colors.White, 0));
+                gradient.GradientStops.Add(new GradientStop(chosenColor, 1));
+                LeftCanvas.Background = gradient;
                 
-                if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    var selected = colorDialog.Color;
-                    var chosenColor = Color.FromArgb(selected.A, selected.R, selected.G, selected.B);
-                    
-                    // Create gradient brush from white to chosen color
-                    var gradient = new LinearGradientBrush();
-                    gradient.StartPoint = new Point(0, 0);
-                    gradient.EndPoint = new Point(1, 1);
-                    gradient.GradientStops.Add(new GradientStop(Colors.White, 0));
-                    gradient.GradientStops.Add(new GradientStop(chosenColor, 1));
-                    LeftCanvas.Background = gradient;
-                    
-                    // Save to settings
-                    settings.LeftCanvasIsGradient = true;
-                    settings.LeftCanvasGradientColor = AppSettings.ColorToHex(chosenColor);
-                    settings.Save();
-                }
-            }
+                // Save to settings
+                settings.LeftCanvasIsGradient = true;
+                settings.LeftCanvasGradientColor = AppSettings.ColorToHex(chosenColor);
+                settings.Save();
+            });
         }
         
         private void btnLeftCanvasChangeBackgroundColor_Click(object sender, RoutedEventArgs e)
         {
-            using (var colorDialog = new System.Windows.Forms.ColorDialog())
+            var currentColor = LeftCanvas != null ? LeftCanvas.BackgroundColor : Colors.White;
+            ShowCustomColorPicker(currentColor, (newColor) =>
             {
-                var currentColor = LeftCanvas != null ? LeftCanvas.BackgroundColor : Colors.White;
-                colorDialog.Color = System.Drawing.Color.FromArgb(currentColor.A, currentColor.R, currentColor.G, currentColor.B);
-
-                if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                if (LeftCanvas != null)
                 {
-                    var selected = colorDialog.Color;
-                    if (LeftCanvas != null)
-                    {
-                        var newColor = Color.FromArgb(selected.A, selected.R, selected.G, selected.B);
-                        LeftCanvas.BackgroundColor = newColor;
-                        
-                        // Save to settings immediately
-                        settings.LeftCanvasBackgroundColor = AppSettings.ColorToHex(newColor);
-                        settings.LeftCanvasIsGradient = false;
-                        settings.Save();
-                    }
+                    LeftCanvas.BackgroundColor = newColor;
+                    
+                    // Save to settings immediately
+                    settings.LeftCanvasBackgroundColor = AppSettings.ColorToHex(newColor);
+                    settings.LeftCanvasIsGradient = false;
+                    settings.Save();
                 }
-            }
+            });
         }
         
         #endregion
@@ -250,7 +267,7 @@ namespace Shaghouri
                 {
                     if (value < 0) value = 0;
                     if (value > 100) value = 100;
-                    LeftCanvas.GridRectWidth = value * 10; // كل وحدة = 10 بكسل
+                    LeftCanvas.GridRectWidth = UnitService.ConvertGridSpacingToPixels(value);
                 }
             }
         }
@@ -263,7 +280,7 @@ namespace Shaghouri
                 {
                     if (value < 1) value = 1;
                     if (value > 100) value = 100;
-                    LeftCanvas.GridRectHeight = value * 10; // كل وحدة = 10 بكسل
+                    LeftCanvas.GridRectHeight = UnitService.ConvertGridSpacingToPixels(value);
                 }
             }
         }
@@ -292,7 +309,7 @@ namespace Shaghouri
                 {
                     if (value < 0) value = 0;
                     if (value > 100) value = 100;
-                    RightCanvas.GridRectWidth = value * 10; // كل وحدة = 10 بكسل
+                    RightCanvas.GridRectWidth = UnitService.ConvertGridSpacingToPixels(value);
                 }
             }
         }
@@ -305,7 +322,7 @@ namespace Shaghouri
                 {
                     if (value < 1) value = 1;
                     if (value > 100) value = 100;
-                    RightCanvas.GridRectHeight = value * 10; // كل وحدة = 10 بكسل
+                    RightCanvas.GridRectHeight = UnitService.ConvertGridSpacingToPixels(value);
                 }
             }
         }
@@ -412,20 +429,23 @@ namespace Shaghouri
             {
                 cm.IsChecked = false;
                 inch.IsChecked = false;
-                SelectedUnit = UnitType.MM;
+                SelectedUnit = UnitService.UnitType.MM;
             }
             else if (sender == cm)
             {
                 mm.IsChecked = false;
                 inch.IsChecked = false;
-                SelectedUnit = UnitType.CM;
+                SelectedUnit = UnitService.UnitType.CM;
             }
             else if (sender == inch)
             {
                 mm.IsChecked = false;
                 cm.IsChecked = false;
-                SelectedUnit = UnitType.INCH;
+                SelectedUnit = UnitService.UnitType.INCH;
             }
+            
+            // تحديث DPI عند تغيير الوحدة
+            UnitService.UpdateDpiScaleFromWindow(this);
             UpdateShapeDimensionDisplay();
         }
         
@@ -454,61 +474,40 @@ namespace Shaghouri
         
         private void btnRighttCanvasChangeGridColor_Click(object sender, RoutedEventArgs e)
         {
-            using (var colorDialog = new System.Windows.Forms.ColorDialog())
+            var currentColor = RightCanvas != null ? RightCanvas.GridLinesColor : Colors.LightGray;
+            ShowCustomColorPicker(currentColor, (selectedColor) =>
             {
-                var currentColor = RightCanvas != null ? RightCanvas.GridLinesColor : Colors.LightGray;
-                colorDialog.Color = System.Drawing.Color.FromArgb(currentColor.A, currentColor.R, currentColor.G, currentColor.B);
-
-                if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    var selected = colorDialog.Color;
-                    if (RightCanvas != null)
-                        RightCanvas.GridLinesColor = Color.FromArgb(selected.A, selected.R, selected.G, selected.B);
-                }
-            }
+                if (RightCanvas != null)
+                    RightCanvas.GridLinesColor = selectedColor;
+            });
         }
         
         private void btnRightCanvasToggleBackground_Click(object sender, RoutedEventArgs e)
         {
-            using (var colorDialog = new System.Windows.Forms.ColorDialog())
+            var lastColor = AppSettings.ParseColor("#FFBEE6E6");
+            ShowCustomColorPicker(lastColor, (chosenColor) =>
             {
-                var lastColor = AppSettings.ParseColor("#FFBEE6E6");
-                colorDialog.Color = System.Drawing.Color.FromArgb(lastColor.A, lastColor.R, lastColor.G, lastColor.B);
-                
-                if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    var selected = colorDialog.Color;
-                    var chosenColor = Color.FromArgb(selected.A, selected.R, selected.G, selected.B);
-                    
-                    // Create gradient brush from white to chosen color
-                    var gradient = new LinearGradientBrush();
-                    gradient.StartPoint = new Point(0, 0);
-                    gradient.EndPoint = new Point(1, 1);
-                    gradient.GradientStops.Add(new GradientStop(Colors.White, 0));
-                    gradient.GradientStops.Add(new GradientStop(chosenColor, 1));
-                    RightCanvas.Background = gradient;
-                }
-            }
+                // Create gradient brush from white to chosen color
+                var gradient = new LinearGradientBrush();
+                gradient.StartPoint = new Point(0, 0);
+                gradient.EndPoint = new Point(1, 1);
+                gradient.GradientStops.Add(new GradientStop(Colors.White, 0));
+                gradient.GradientStops.Add(new GradientStop(chosenColor, 1));
+                RightCanvas.Background = gradient;
+            });
         }
         
         private void btnRightCanvasChangeBackgroundColor_Click(object sender, RoutedEventArgs e)
         {
-            using (var colorDialog = new System.Windows.Forms.ColorDialog())
+            var currentColor = RightCanvas != null ? RightCanvas.BackgroundColor : Colors.White;
+            ShowCustomColorPicker(currentColor, (newColor) =>
             {
-                var currentColor = RightCanvas != null ? RightCanvas.BackgroundColor : Colors.White;
-                colorDialog.Color = System.Drawing.Color.FromArgb(currentColor.A, currentColor.R, currentColor.G, currentColor.B);
-
-                if (colorDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                if (RightCanvas != null)
                 {
-                    var selected = colorDialog.Color;
-                    if (RightCanvas != null)
-                    {
-                        var newColor = Color.FromArgb(selected.A, selected.R, selected.G, selected.B);
-                        RightCanvas.BackgroundColor = newColor;
-                        RightCanvas.Background = new SolidColorBrush(newColor);
-                    }
+                    RightCanvas.BackgroundColor = newColor;
+                    RightCanvas.Background = new SolidColorBrush(newColor);
                 }
-            }
+            });
         }
         
         #endregion

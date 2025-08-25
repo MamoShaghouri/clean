@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -15,8 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="9.0.8" />
-    <PackageReference Include="System.Windows.Forms" Version="4.0.0" />
+    <PackageReference Include="SkiaSharp" Version="2.88.7" />
+    <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.7" />
+
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
     <PackageReference Include="System.Text.Json" Version="9.0.8" />
   </ItemGroup>
@@ -33,6 +34,8 @@
     <Compile Include="CreateSettingsHandlers.cs" />
     <Compile Include="CreateFileHandlers.cs" />
     
+    <!-- Custom Controls -->
+    <Compile Include="CustomColorPicker.xaml.cs" DependentUpon="CustomColorPicker.xaml" />
     <Compile Include="CustomGridControl.cs" />
     <Compile Include="Draw Rectangle.xaml.cs" DependentUpon="Draw Rectangle.xaml" />
     <Compile Include="Libraries.xaml.cs" DependentUpon="Libraries.xaml" />
@@ -42,6 +45,7 @@
     <Compile Include="Rename Piece.xaml.cs" DependentUpon="Rename Piece.xaml" />
     <Compile Include="Save Pattern.xaml.cs" DependentUpon="Save Pattern.xaml" />
     <Compile Include="Save_Pattern.cs" />
+    <Compile Include="Services\UnitService.cs" />
     <Compile Include="Settings.xaml.cs" DependentUpon="Settings.xaml" />
     <Compile Include="Shape.cs" />
     <Compile Include="ShapePreviewControl.cs" />
@@ -78,6 +82,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Create.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CustomColorPicker.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -136,4 +144,4 @@
     </None>
   </ItemGroup>
 
-</Project> 
+</Project>

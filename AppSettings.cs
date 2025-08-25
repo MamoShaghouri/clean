@@ -17,6 +17,15 @@ namespace Shaghouri
         public double LeftCanvasBackgroundOpacity { get; set; } = 1.0; // Default: fully opaque
         public bool LeftCanvasIsGradient { get; set; } = false;
         public string LeftCanvasGradientColor { get; set; } = "#FF41D8CE"; // Default gradient color
+        
+        // Right Canvas Settings
+        public string RightCanvasBackgroundColor { get; set; } = "#FFFFFFFF"; // Default: White
+        public double RightCanvasBackgroundOpacity { get; set; } = 1.0; // Default: fully opaque
+        public bool RightCanvasIsGradient { get; set; } = false;
+        public string RightCanvasGradientColor { get; set; } = "#FFE6F3FF"; // Default: Light Blue
+        public string RightCanvasGridLinesColor { get; set; } = "#FFD3D3D3"; // Default: Light Gray
+        public double RightCanvasGridOpacity { get; set; } = 1.0;
+        public bool RightCanvasShowGrid { get; set; } = true;
 
         public static string SettingsFilePath => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
 

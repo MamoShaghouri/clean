@@ -259,10 +259,10 @@
                     </TabItem>
                     <TabItem x:Name="Drawing" HorizontalAlignment="Center" Height="30" Header="Drawing" VerticalAlignment="Center" Width="75" Margin="3,0,0,3" Foreground="#FF3C736F" FontSize="15" FontWeight="ExtraBlack">
                         <Grid x:Name="TabControlDrawing" Background="#FFBEE6E6" Height="55" VerticalAlignment="Center">
-                            <Button x:Name="BtnCircle" HorizontalAlignment="Left" Margin="3,0,0,0" VerticalAlignment="Center" Height="42" Width="42" Style="{StaticResource ModernButtonStyle}">
+                            <Button x:Name="btnCircle" HorizontalAlignment="Left" Margin="3,0,0,0" VerticalAlignment="Center" Height="42" Width="42" Style="{StaticResource ModernButtonStyle}">
                                 <Image x:Name="Circle_png" Source="Icons/Circle.png" Width="32" Height="32" Stretch="Uniform"/>
                             </Button>
-                            <Button x:Name="btn_Rectangle" HorizontalAlignment="Left" Margin="48,0,0,0" VerticalAlignment="Center" Height="42" Width="42" Style="{StaticResource ModernButtonStyle}">
+                            <Button x:Name="btnRectangle" HorizontalAlignment="Left" Margin="48,0,0,0" VerticalAlignment="Center" Height="42" Width="42" Style="{StaticResource ModernButtonStyle}">
                                 <Image x:Name="Rectangle_png" Source="Icons/Rectangle.png" Width="32" Height="32" Stretch="Uniform" Margin="5,3,0,0"/>
                             </Button>
                         </Grid>
@@ -321,7 +321,7 @@
                             <Button x:Name="btnHelpLine" Content="Help Line" HorizontalAlignment="Left" Margin="109,3,0,0" VerticalAlignment="Top" Height="42"/>
                             <Button x:Name="btnDrawLine" Content="Draw Line" HorizontalAlignment="Left" Margin="297,3,0,0" VerticalAlignment="Top" Height="42"/>
                             <Button x:Name="btnZipperLine" Content="Zipper Line" HorizontalAlignment="Left" Margin="229,3,0,0" VerticalAlignment="Top" Height="42"/>
-                            <Button x:Name="btnRectangle" Content="Rectangle" HorizontalAlignment="Left" Margin="168,3,0,0" VerticalAlignment="Top" Height="42"/>
+                            <Button x:Name="btnInnerRectangle" Content="Rectangle" HorizontalAlignment="Left" Margin="168,3,0,0" VerticalAlignment="Top" Height="42"/>
                             <Button x:Name="btnCutLine" Content="Cut Line" HorizontalAlignment="Left" Margin="358,3,0,0" VerticalAlignment="Top" Height="42"/>
                             <Button x:Name="btnChangeLine" Content="Change Line" HorizontalAlignment="Left" Margin="410,3,0,0" VerticalAlignment="Top" Height="42"/>
                             <Button x:Name="btnRemoveAllLine" Content="Remove All Line" HorizontalAlignment="Left" Margin="484,3,0,0" VerticalAlignment="Top" Height="42"/>
@@ -493,12 +493,12 @@
                     <Button x:Name="btnRightToggleSnap" Height="42" Width="42" Style="{StaticResource ModernButtonStyle}" Margin="5,3,5,3">
                         <Image x:Name="Right_Snap_png" Source="Icons/Right Snap.png" Width="32" Height="32" Stretch="Uniform" Cursor="Hand"/>
                     </Button>
-                    <Button x:Name="btnRighttCanvasShow_HideGrid" Style="{StaticResource ModernButtonStyle}" Width="42" Height="42" Margin="5,3,5,3">
+                    <Button x:Name="btnRighttCanvasShow_HideGrid" Style="{StaticResource ModernButtonStyle}" Width="42" Height="42" Margin="5,3,5,3" Click="btnRighttCanvasShow_HideGrid_Click">
                         <Image x:Name="Right_Grid_Show_png" Source="/Icons/Right Grid Show.png" Width="32" Height="32" Stretch="Uniform" Cursor="Hand"/>
                     </Button>
                     <Label x:Name="LabelRightCanvasGridSpacingWidth" Content="W" VerticalAlignment="Center" FontSize="18" Margin="5,3,0,3" Width="20" Height="24" FontWeight="ExtraBold" Padding="0,0,0,0" HorizontalContentAlignment="Center"/>
-                    <TextBox x:Name="TextBoxRightCanvasGridSpacingWidth" Text="10" Width="24" FontSize="10" Height="27" Margin="3,0,3,0" FontWeight="ExtraBlack" SelectionOpacity="0.6" UndoLimit="200" VerticalContentAlignment="Center" BorderThickness="1,1,1,1" BorderBrush="Black" Padding="3,0,0,0"/>
-                    <TextBox x:Name="TextBoxRightCanvasGridSpacingHeight" Text="10" Width="24" FontSize="10" Height="27" Margin="3,0,3,0" HorizontalAlignment="Center" SelectionOpacity="0.6" UndoLimit="200" FontWeight="ExtraBlack" TextAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="-1,0,0,0" SelectionBrush="#FFA7D3D4" BorderBrush="Black"/>
+                    <TextBox x:Name="TextBoxRightCanvasGridSpacingWidth" Text="10" Width="24" FontSize="10" Height="27" Margin="3,0,3,0" FontWeight="ExtraBlack" SelectionOpacity="0.6" UndoLimit="200" VerticalContentAlignment="Center" BorderThickness="1,1,1,1" BorderBrush="Black" Padding="3,0,0,0" TextChanged="TextBoxRightCanvasGridSpacingWidth_TextChanged"/>
+                    <TextBox x:Name="TextBoxRightCanvasGridSpacingHeight" Text="10" Width="24" FontSize="10" Height="27" Margin="3,0,3,0" HorizontalAlignment="Center" SelectionOpacity="0.6" UndoLimit="200" FontWeight="ExtraBlack" TextAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="-1,0,0,0" SelectionBrush="#FFA7D3D4" BorderBrush="Black" TextChanged="TextBoxRightCanvasGridSpacingHeight_TextChanged"/>
                     <Label x:Name="LabelRightCanvasGridSpacingHeight" Content="H" Width="15" FontWeight="ExtraBold" FontSize="18" Height="24" Padding="0,0,0,0" Margin="0,0,11,0"/>
                     <Slider x:Name="SilderRightCanvasGridOpacity" VerticalAlignment="Center" Width="170" Cursor="Hand" Margin="3,3,3,3" RenderTransformOrigin="0.5,0.5" Foreground="#FF15735B" ValueChanged="SilderRightCanvasGridOpacity_ValueChanged" Delay="250" Maximum="100" SmallChange="0" Value="100">
                         <Slider.LayoutTransform>
@@ -511,10 +511,10 @@
                         </Slider.LayoutTransform>
                     </Slider>
                     <Label x:Name="RightCanvasGridOpacityValue" Content="100" VerticalAlignment="Center" FontSize="18" Margin="3,3,3,3" Width="42.1266666666667" Height="28" FontFamily="Stencil" FontWeight="ExtraBold"/>
-                    <Button x:Name="btnRighttCanvasChangeGridColor" Style="{StaticResource ModernButtonStyle}" Width="42" Height="42">
+                    <Button x:Name="btnRighttCanvasChangeGridColor" Style="{StaticResource ModernButtonStyle}" Width="42" Height="42" Click="btnRighttCanvasChangeGridColor_Click">
                         <Image x:Name="Right_Grid_color_png" Source="/Icons/Right Grid color.png" Width="35" Height="35" Stretch="Uniform" Cursor="Hand"/>
                     </Button>
-                    <Button x:Name="RightShow" Content="Right" Width="144" Height="32" Cursor="Hand" Click="RightShow_Click" Style="{StaticResource ModernButtonStyle}" Margin="5,3,3,3" FontSize="10" FontWeight="ExtraBold"/>
+                    <Button x:Name="btnRightShow" Content="Right" Width="144" Height="32" Cursor="Hand" Click="btnRightShow_Click" Style="{StaticResource ModernButtonStyle}" Margin="5,3,3,3" FontSize="10" FontWeight="ExtraBold"/>
                 </StackPanel>
                 <Button x:Name="btnEsc" HorizontalAlignment="Left" Margin="634,0,0,0" VerticalAlignment="Center" Height="42" Width="42" Style="{StaticResource ModernButtonStyle}" Padding="5,4,10,4">
                     <Image x:Name="Esc_Png" Source="Icons/Esc.png" Width="32" Height="32" Stretch="Uniform" Margin="0,0,-8,0"/>
@@ -548,7 +548,7 @@
                     <Button x:Name="btnLeftCanvasChangeBackgroundColor" Style="{StaticResource ModernButtonStyle}" Cursor="Hand" Width="42" Height="42" Click="btnLeftCanvasChangeBackgroundColor_Click">
                         <Image x:Name="Left_color_palette" Source="/Icons/Left-color-palette.png" Width="32" Height="32" Stretch="Uniform"/>
                     </Button>
-                    <Button x:Name="btnLeftCanvasToggleBackground" Style="{StaticResource ModernButtonStyle}" Cursor="Hand" FontSize="10" Width="42" Margin="3,3,3,3" Height="42" FontWeight="ExtraBold">
+                    <Button x:Name="btnLeftCanvasToggleBackground" Style="{StaticResource ModernButtonStyle}" Cursor="Hand" FontSize="10" Width="42" Margin="3,3,3,3" Height="42" FontWeight="ExtraBold" Click="btnLeftCanvasToggleBackground_Click">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image x:Name="Left_fine_arts" Width="32" Height="32" Stretch="Uniform" Source="/Icons/Left-fine-arts.png"/>
                         </StackPanel>
@@ -718,7 +718,7 @@
                 <local:CustomGridControl x:Name="LeftCanvas" Background="White" Grid.Column="0" Margin="3,3,3,3">
                     <!-- تمت إزالة ContextMenu من هنا للتحكم البرمجي -->
                 </local:CustomGridControl>
-                <local:RightCanvas x:Name="RightCanvas" Background="#FFFDFDFD" Grid.Column="1" Margin="3,3,3,3" />
+                <local:CustomGridControl x:Name="RightCanvas" Background="#FFFDFDFD" Grid.Column="1" Margin="3,3,3,3" />
             </Grid>
             <Border x:Name="Right1" Grid.Column="2" BorderBrush="Black" BorderThickness="1">
                 <Border.Background>
